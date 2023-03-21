@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
+	<title>Geometry Dash save data tools</title>
+</head>
+
+<body>
+	<main class="container">
+		<h1>Geometry Dash save data tools</h1>
+		<section id="load-save-file">
+			<section id="save-input-box">
+				<label for="file">Open save file:
+					<input type="file" id="save-file-input" name="save-file-input">
+				</label>
+			</section>
+			<section>
+				Your save data can typically be found in the following locations:
+				<ul>
+					<li>Windows: <code>%localappdata%/GeometryDash</code></li>
+					<li>macOS: <code>~/Library/Application Support/GeometryDash</code></li>
+					<li>Android: <code>/data/data/com.robtopx.geometryjump</code></li>
+				</ul>
+				Both <code>CCLocalLevels.dat</code> and <code>CCGameManager.dat</code> are supported.
+			</section>
+		</section>
+		<section id="save-file-loading" style="display: none;">
+			<a href="#" aria-busy="true">Loading save file...</a>
+		</section>
+		<section id="save-loaded" style="display: none;">
+			<h2>Loaded file <span id="save-filename">GameSave.dat</span></h2>
+
+			<!-- not dealing with this just yet...
+			<p>
+				<a href="#" role="button" id="btn-format">Format save</a>
+			</p>
+			-->
+
+			<p>
+				<a href="#" role="button" id="btn-download-plaintext">Download decrypted</a>
+				<br />
+				<small>Only Windows/Android can load decrypted saves!</small>
+			</p>
+
+			<a href="#" role="button" id="restart-btn" class="secondary">Go to beginning</a>
+		</section>
+		<section id="worker-error" style="display: none;">
+			<h2>An error has occurred ...</h2>
+			<p>
+				<b>Location:</b> <span id="error-location">somewhere</span>
+				<br />
+				<b>Message:</b> <span id="error-text">???</span>
+			</p>
+			<button id="restart-btn">Go to beginning</button>
+		</section>
+	</main>
+	<footer class="container">
+		<p>
+			Page written by <a href="https://xyze.dev">zmx</a>.
+			<br />
+			Page source and script licensed under the <a href="./LICENSE.txt">MIT license</a>.
+			<br />
+			Source available on <a href="https://github.com/qimiko/gd-save-tools">GitHub</a>.
+		</p>
+	</footer>
+	<script type="module" src="assets/js/index.mjs"></script>
+</body>
+
+</html>
