@@ -59,7 +59,7 @@ function handle_worker_message(e) {
 function on_file_input(file) {
 	toggle_section("save-file-loading");
 
-	const worker = new Worker("/assets/js/savefile-worker.mjs", { type: "module" });
+	const worker = new Worker("assets/js/savefile-worker.mjs", { type: "module" });
 	worker.addEventListener("message", handle_worker_message);
 	worker.addEventListener("error", (e) => {
 		toggle_section("worker-error");
