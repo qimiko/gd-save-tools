@@ -33,19 +33,23 @@
 		<section id="save-loaded" style="display: none;">
 			<h2>Loaded file <span id="save-filename">GameSave.dat</span></h2>
 
-			<!-- not dealing with this just yet...
 			<p>
-				<a href="#" role="button" id="btn-format">Format save</a>
+				<h3>Manage</h3>
+				<a href="#" role="button" id="btn-upgrade-save" style="display: none;">Upgrade savefile</a>
+				<a href="#" role="button" id="btn-downgrade-save" style="display: none;">Downgrade savefile</a>
 			</p>
-			-->
 
 			<p>
+				<h3>Download</h3>
 				<a href="#" role="button" id="btn-download-plaintext">Download decrypted</a>
 				<br />
 				<small>Only Windows/Android can load decrypted saves!</small>
 			</p>
 
 			<a href="#" role="button" id="restart-btn" class="secondary">Go to beginning</a>
+		</section>
+		<section id="save-processing" style="display: none;">
+			<a href="#" aria-busy="true">Processing save file...</a>
 		</section>
 		<section id="worker-error" style="display: none;">
 			<h2>An error has occurred ...</h2>

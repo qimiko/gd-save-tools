@@ -2,6 +2,7 @@ const SECTIONS = /** @type {const} */ ([
 	"load-save-file",
 	"save-file-loading",
 	"save-loaded",
+	"save-processing",
 	"worker-error"
 ])
 
@@ -33,6 +34,14 @@ function handle_worker_message(e) {
 		case "file-loaded": {
 			document.querySelector("#save-filename").textContent = data.name;
 
+			if (data.version == 1) {
+				document.querySelector("#btn-upgrade-save").style.display = "inline-block";
+				document.querySelector("#btn-downgrade-save").style.display = "none";
+			} else {
+				document.querySelector("#btn-upgrade-save").style.display = "none";
+				document.querySelector("#btn-downgrade-save").style.display = "inline-block";
+			}
+
 			toggle_section("save-loaded");
 			break;
 		}
@@ -47,6 +56,18 @@ function handle_worker_message(e) {
 
 			window.URL.revokeObjectURL(data.url);
 
+			break;
+		}
+		case "file-version-changed": {
+			if (data.version == 1) {
+				document.querySelector("#btn-upgrade-save").style.display = "inline-block";
+				document.querySelector("#btn-downgrade-save").style.display = "none";
+			} else {
+				document.querySelector("#btn-upgrade-save").style.display = "none";
+				document.querySelector("#btn-downgrade-save").style.display = "inline-block";
+			}
+
+			toggle_section("save-loaded");
 			break;
 		}
 		case "debug-print": {
@@ -125,4 +146,14 @@ document.querySelectorAll("#restart-btn").forEach((b) => {
 
 document.querySelector("#btn-download-plaintext").addEventListener("click", (e) => {
 	SAVEFILE_WORKER.postMessage({ type: "download-plaintext" });
+});
+
+document.querySelector("#btn-upgrade-save").addEventListener("click", (e) => {
+	toggle_section("save-processing");
+	SAVEFILE_WORKER.postMessage({ type: "upgrade-save" });
+});
+
+document.querySelector("#btn-downgrade-save").addEventListener("click", (e) => {
+	toggle_section("save-processing");
+	SAVEFILE_WORKER.postMessage({ type: "downgrade-save" });
 });

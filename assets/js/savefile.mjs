@@ -107,7 +107,6 @@ export function try_load_save(data) {
 
 	const parsed_save = parser.parse(save.file);
 
-
 	if (!("plist" in parsed_save)) {
 		throw new TypeError("non plist object given");
 	}
@@ -118,6 +117,66 @@ export function try_load_save(data) {
 		save.plist_version = 1
 	}
 
-
 	return save;
+}
+
+const VERSION_REPLACEMENTS = /** @type {const} */ ({
+	// booleans have a slash at end, other keys may have a slash in beginning
+	"k>": "key>",
+	"s>": "string>",
+	// this tag can exist. for some reason
+	"<d />": "<dict />",
+	"d>": "dict>",
+	"r>": "real>",
+	"i>": "integer>",
+	"<t": "<true",
+});
+
+/**
+ * converts a save file to the latest gjver (2.0)
+ * @param {*} file decoded save file plist
+ * @param {number} version gjver of the save file
+ * @returns {string} upgraded version of save file
+ */
+export function upgrade_save_file(file, version) {
+	if (version == 2) {
+		return file;
+	}
+
+	// very naive, but it should work for gd data?
+	for (const [key, value] of Object.entries(VERSION_REPLACEMENTS)) {
+		file = file.replaceAll(value, key);
+	}
+
+	// update plist version
+	// again, very naive but not worth it
+	file = file.replace(
+		"<plist version=\"1.0\">",
+		"<plist version=\"1.0\" gjver=\"2.0\">"
+	);
+
+	return file;
+}
+
+/**
+ * converts a save file to the earliest gjver (1.0)
+ * @param {*} file decoded save file plist
+ * @param {number} version gjver of the save file
+ * @returns {string} upgraded version of save file
+ */
+export function downgrade_save_file(file, version) {
+	if (version == 1) {
+		return file;
+	}
+
+	for (const [key, value] of Object.entries(VERSION_REPLACEMENTS)) {
+		file = file.replaceAll(key, value);
+	}
+
+	file = file.replace(
+		"<plist version=\"1.0\" gjver=\"2.0\">",
+		"<plist version=\"1.0\">"
+	);
+
+	return file;
 }
