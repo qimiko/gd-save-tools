@@ -77,13 +77,25 @@ export function try_load_save(data) {
 
 	const save = { file: null, is_mac: false };
 
+	// test if valid plist first
 	try {
-		// attempt windows decode
-		save.file = load_save_as_windows(data);
+		const as_string = data.reduce((s, x) => s + String.fromCharCode(x), "")
+		if (as_string.startsWith("<?xml")) {
+			save.file = as_string;
+		}
 	} catch (_) {
-		// try load as macos
-		save.file = load_save_as_macos(data);
-		save.is_mac = true;
+		// ignore error, continue parsing
+	}
+
+	if (!save.file) {
+		try {
+			// attempt windows decode
+			save.file = load_save_as_windows(data);
+		} catch (_) {
+			// try load as macos
+			save.file = load_save_as_macos(data);
+			save.is_mac = true;
+		}
 	}
 
 	// validate save data/read attributes
@@ -100,10 +112,8 @@ export function try_load_save(data) {
 		throw new TypeError("non plist object given");
 	}
 
-	save.parsed = parsed_save;
-
-	if ("attr_gjver" in save.parsed.plist) {
-		save.plist_version = +save.parsed.plist.attr_gjver
+	if ("attr_gjver" in parsed_save.plist) {
+		save.plist_version = +parsed_save.plist.attr_gjver
 	} else {
 		save.plist_version = 1
 	}
