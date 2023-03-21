@@ -64,8 +64,13 @@ function on_file_input(file) {
 	worker.addEventListener("error", (e) => {
 		toggle_section("worker-error");
 
-		document.querySelector("#error-location").textContent = `${e.filename}:${e.lineno}:${e.colno}`;
-		document.querySelector("#error-text").textContent = e.message;
+		if (e.message) {
+			document.querySelector("#error-location").textContent = `${e.filename}:${e.lineno}:${e.colno}`;
+			document.querySelector("#error-text").textContent = e.message;
+		} else {
+			document.querySelector("#error-location").textContent = "unknown";
+			document.querySelector("#error-text").textContent = "none provided";
+		}
 
 		console.error(e);
 	});
